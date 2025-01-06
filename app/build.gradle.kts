@@ -26,21 +26,49 @@ android {
             storePassword = "yoshipos"
         }
 
+
+//        getByName("debug") {
+//            keyAlias = "gundam_wing"
+//            keyPassword = "dspread"
+//            storeFile = file("app.keystore")
+//            storePassword = "dspread"
+//        }
+
+
+
         getByName("debug") {
-            keyAlias = "gundam_wing"
-            keyPassword = "dspread"
-            storeFile = file("app.keystore")
-            storePassword = "dspread"
+            keyAlias = "yoshi"
+            keyPassword = "yoshipos"
+            storeFile = file("release_keystore")
+            storePassword = "yoshipos"
         }
     }
 
     buildTypes {
+
+//        debug {
+//            signingConfig = signingConfigs.getByName("debug")
+//            signingConfig?.storeFile = file("app.keystore")
+//            signingConfig?.storePassword = "dspread"
+//            signingConfig?.keyPassword = "dspread"
+//            signingConfig?.keyAlias = "gundam_wing"
+//        }
+
+
         debug {
-            signingConfig = signingConfigs.getByName("debug")
-            signingConfig?.storeFile = file("app.keystore")
-            signingConfig?.storePassword = "dspread"
-            signingConfig?.keyPassword = "dspread"
-            signingConfig?.keyAlias = "gundam_wing"
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("release")
+            signingConfig?.storeFile = file("release_keystore")
+            signingConfig?.storePassword = "yoshipos"
+            signingConfig?.keyPassword = "yoshipos"
+            signingConfig?.keyAlias = "yoshi"
+
+            isDebuggable = true
+            isJniDebuggable = true
         }
 
         release {
@@ -90,4 +118,9 @@ dependencies {
 
     implementation("com.dspread.library:dspread_pos_sdk:6.0.8")
     implementation("com.dspread.print:dspread_print_sdk:1.3.7-beta")
+
+    /***
+     * UI AUTOMATOR
+     */
+    androidTestImplementation(libs.androidx.uiautomator)
 }
