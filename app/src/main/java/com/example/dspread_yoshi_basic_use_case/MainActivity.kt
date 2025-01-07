@@ -2,6 +2,7 @@ package com.example.dspread_yoshi_basic_use_case
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Hashtable
 
 class MainActivity : AppCompatActivity(), MifareCardOperationCallback {
@@ -49,7 +52,7 @@ class MainActivity : AppCompatActivity(), MifareCardOperationCallback {
 
     private suspend fun initalizePOS() {
         (application as DSpreadYoshiApplication).open(
-            mode = QPOSService.CommunicationMode.UART, this
+            mode = QPOSService.CommunicationMode.UART_SERVICE, this
         ) {
             CoroutineScope(Dispatchers.Main).launch {
                 binding.tvPOSStatus.text = "POS Inicializado"
@@ -74,9 +77,12 @@ class MainActivity : AppCompatActivity(), MifareCardOperationCallback {
 
     private fun setButtonStatus() {
         binding.actionBtn.setOnClickListener {
-            binding.actionBtn.text = "Detectando NFC...".uppercase()
+            binding.actionBtn.text = "Waiting for card...".uppercase()
             binding.tvCardInfo.visibility = View.GONE
-            pos?.pollOnMifareCard(10)
+            disableButton()
+
+            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP)
+            pos?.doTrade(20)
         }
     }
 
@@ -90,7 +96,7 @@ class MainActivity : AppCompatActivity(), MifareCardOperationCallback {
             pos?.finishMifareCard(1)
 
             CoroutineScope(Dispatchers.Main).launch {
-                binding.actionBtn.text = "Detectar NFC".uppercase()
+                binding.actionBtn.text = "Read card".uppercase()
                 binding.tvCardInfo.visibility = View.VISIBLE
 
                 val cardType = arg0?.get("cardType")
@@ -138,21 +144,55 @@ class MainActivity : AppCompatActivity(), MifareCardOperationCallback {
     }
 
     override fun onError(p0: QPOSService.Error?) {
-        CoroutineScope(Dispatchers.Default).launch {
-            pos?.finishMifareCard(1)
-            CoroutineScope(Dispatchers.Main).launch {
-                val nOfErrors = (binding.tvErrorTransactions.text).toString().toInt() ?: 0
-                binding.tvErrorTransactions.text = (nOfErrors+1).toString()
-                increaseTotalTransactions()
-            }
-            delay(3000)
-
-            pos?.pollOnMifareCard(10)
-        }
+        pos?.doTrade(20)
+//        CoroutineScope(Dispatchers.Default).launch {
+//            pos?.finishMifareCard(1)
+//            CoroutineScope(Dispatchers.Main).launch {
+//                val nOfErrors = (binding.tvErrorTransactions.text).toString().toInt() ?: 0
+//                binding.tvErrorTransactions.text = (nOfErrors+1).toString()
+//                increaseTotalTransactions()
+//            }
+//            delay(3000)
+//
+//            pos?.pollOnMifareCard(10)
+//        }
     }
 
     private fun increaseTotalTransactions() {
         val nTotal = (binding.tvTotalTransactions.text).toString().toInt() ?: 0
         binding.tvTotalTransactions.text = (nTotal+1).toString()
+    }
+
+    override fun onRequestSetAmount() {
+        pos.setAmount("10", "0", "643", QPOSService.TransactionType.SALE);
+    }
+
+    override fun onRequestTime() {
+        try {
+            val terminalTime = SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().time)
+            Log.d(MyQPOSClass::class.java.name, "terminalTime=$terminalTime")
+
+            pos.sendTime(terminalTime)
+        } catch (e: Exception) {
+            Log.d(MyQPOSClass::class.java.name, "sendTime error=$e")
+        }
+    }
+
+    override fun onDoTradeResult(p0: QPOSService.DoTradeResult?, p1: Hashtable<String, String>?) {
+        pos.doEmvApp(QPOSService.EmvOption.START)
+    }
+
+    override fun onQposRequestPinResult(p0: MutableList<String>?, p1: Int) {
+        val one = Integer.valueOf("1", 16)
+        val two = Integer.valueOf("5", 16)
+        val three = Integer.valueOf("1", 16)
+        val four = Integer.valueOf("9", 16)
+
+        pos.pinMapSync("$one$two$three$four",3)
+    }
+    override fun onRequestSetPin() {
+    }
+
+    override fun onRequestWaitingUser() {
     }
 }

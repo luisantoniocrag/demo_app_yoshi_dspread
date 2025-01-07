@@ -38,6 +38,8 @@ class DSpreadYoshiApplication  : Application() {
         pos?.let { pos ->
             Log.d(DSpreadYoshiApplication::class.java.name, "Pos is NOT NULL")
 
+            pos.setD20Trade(true)
+
             pos.setContext(this)
             pos.setConext(this) // maybe typo?
 

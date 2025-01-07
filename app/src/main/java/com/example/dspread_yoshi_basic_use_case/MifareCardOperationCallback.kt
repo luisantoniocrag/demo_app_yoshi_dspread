@@ -11,4 +11,10 @@ interface MifareCardOperationCallback {
     fun onFinishMifareCardResult(p0: Boolean)
     fun onRequestQposConnected()
     fun onError(p0: QPOSService.Error?)
+    fun onRequestSetAmount()
+    fun onRequestTime()
+    fun onDoTradeResult(p0: QPOSService.DoTradeResult?, p1: Hashtable<String, String>?)
+    fun onQposRequestPinResult(p0: MutableList<String>?, p1: Int)
+    fun onRequestSetPin()
+    fun onRequestWaitingUser()
 }

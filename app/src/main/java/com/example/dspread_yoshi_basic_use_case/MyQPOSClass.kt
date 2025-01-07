@@ -24,7 +24,8 @@ class MyQPOSClass : CQPOSService() {
     }
 
     override fun onQposRequestPinResult(p0: MutableList<String>?, p1: Int) {
-        TODO("Not yet implemented")
+        Log.d(this::class.java.name, "onQposRequestPinResult() p0=$p0, p1=$p1")
+        mifareCardOperationCallback?.onQposRequestPinResult(p0, p1)
     }
 
     override fun onReturnD20SleepTimeResult(p0: Boolean) {
@@ -32,7 +33,8 @@ class MyQPOSClass : CQPOSService() {
     }
 
     override fun onQposRequestPinStartResult(p0: MutableList<String>?) {
-        TODO("Not yet implemented")
+        Log.d(this::class.java.name, "onQposRequestPinStartResult() p0=$p0")
+
     }
 
     override fun onQposPinMapSyncResult(p0: Boolean, p1: Boolean) {
@@ -40,7 +42,8 @@ class MyQPOSClass : CQPOSService() {
     }
 
     override fun onRequestWaitingUser() {
-        TODO("Not yet implemented")
+        Log.d(this::class.java.name, "onRequestWaitingUser()")
+        mifareCardOperationCallback?.onRequestWaitingUser()
     }
 
 
@@ -141,7 +144,8 @@ class MyQPOSClass : CQPOSService() {
     }
 
     override fun onDoTradeResult(p0: QPOSService.DoTradeResult?, p1: Hashtable<String, String>?) {
-        TODO("Not yet implemented")
+        Log.d(this::class.java.name, "onDoTradeResult() p0= $p0, p1=$p1")
+        mifareCardOperationCallback?.onDoTradeResult(p0, p1)
     }
 
     override fun onFinishMifareCardResult(p0: Boolean) {
@@ -193,7 +197,8 @@ class MyQPOSClass : CQPOSService() {
     }
 
     override fun onRequestSetAmount() {
-        TODO("Not yet implemented")
+        Log.d(this::class.java.name, "onRequestSetAmount()")
+        mifareCardOperationCallback?.onRequestSetAmount()
     }
 
     override fun onRequestSelectEmvApp(p0: ArrayList<String>?) {
@@ -213,11 +218,12 @@ class MyQPOSClass : CQPOSService() {
     }
 
     override fun onRequestTime() {
-        TODO("Not yet implemented")
+        Log.d(this::class.java.name, "onRequestTime()")
+        mifareCardOperationCallback?.onRequestTime()
     }
 
     override fun onRequestTransactionResult(p0: QPOSService.TransactionResult?) {
-        TODO("Not yet implemented")
+        Log.d(this::class.java.name, "onRequestTransactionResult() p0=$p0")
     }
 
     override fun onRequestTransactionLog(p0: String?) {
@@ -252,7 +258,7 @@ class MyQPOSClass : CQPOSService() {
     }
 
     override fun onRequestDisplay(p0: QPOSService.Display?) {
-        TODO("Not yet implemented")
+        Log.d(this::class.java.name, "onRequestDisplay() p0=$p0")
     }
 
     override fun onReturnReversalData(p0: String?) {
@@ -260,7 +266,7 @@ class MyQPOSClass : CQPOSService() {
     }
 
     override fun onReturnGetPinInputResult(p0: Int) {
-        TODO("Not yet implemented")
+        Log.d(this::class.java.name, "onReturnGetPinInputResult() p0=$p0")
     }
 
     override fun onReturnGetKeyBoardInputResult(p0: String?) {
@@ -320,7 +326,8 @@ class MyQPOSClass : CQPOSService() {
     }
 
     override fun onRequestSetPin() {
-        TODO("Not yet implemented")
+        Log.d(this::class.java.name, "onRequestSetPin()")
+        mifareCardOperationCallback?.onRequestSetPin()
     }
 
 
@@ -578,7 +585,7 @@ class MyQPOSClass : CQPOSService() {
     }
 
     override fun onTradeCancelled() {
-        TODO("Not yet implemented")
+        Log.d(this::class.java.name, "onTradeCancelled()")
     }
 
     override fun onReturnSetAESResult(p0: Boolean, p1: String?) {
