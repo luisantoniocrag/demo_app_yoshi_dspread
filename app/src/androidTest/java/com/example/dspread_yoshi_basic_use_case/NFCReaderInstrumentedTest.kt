@@ -20,6 +20,7 @@ class NFCReaderInstrumentedTest {
 
         val posInitialized = device.findObject(UiSelector().text("POS Inicializado"))
         val btnStartNFCReader = device.findObject(UiSelector().text("DETECTAR NFC"))
+        val totalOfTransactions = device.findObject(UiSelector().text("100"))
 
         var successOperations = 0
 
@@ -29,7 +30,7 @@ class NFCReaderInstrumentedTest {
         posInitialized.waitForExists(1000)
 
         if (posInitialized.exists()) {
-            while (successOperations != TIMES) {
+            while (!totalOfTransactions.exists()) {
                 println("✅POS is initialized ✅")
 
                 btnStartNFCReader.waitForExists(1000)
@@ -38,11 +39,13 @@ class NFCReaderInstrumentedTest {
                     btnStartNFCReader.click()
                     successOperations++
                 }
-                println("Success operations =  $successOperations")
+                Log.w(this::class.java.name, "Success operations =  $successOperations")
             }
 
+            Thread.sleep(100000)
+
         } else {
-            println("❌POS is NOT initialized❌")
+            Log.w(this::class.java.name, "❌POS is NOT initialized❌")
         }
     }
 }

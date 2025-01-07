@@ -247,7 +247,7 @@ class MyQPOSClass : CQPOSService() {
     }
 
     override fun onError(p0: QPOSService.Error?) {
-        Log.d(this::class.java.name, "onError() = $p0")
+        Log.e(this::class.java.name, "onError() = $p0")
         mifareCardOperationCallback?.onError(p0)
     }
 

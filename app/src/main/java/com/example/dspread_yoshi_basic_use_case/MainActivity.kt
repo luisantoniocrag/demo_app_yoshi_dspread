@@ -113,6 +113,10 @@ class MainActivity : AppCompatActivity(), MifareCardOperationCallback {
                     cardAtsLen: $cardAtsLen
                 """.trimIndent()
 
+                val nOfSuccess = (binding.tvSuccessTransactions.text).toString().toInt() ?: 0
+                binding.tvSuccessTransactions.text = (nOfSuccess+1).toString()
+                increaseTotalTransactions()
+
                 setButtonStatus()
             }
         }
@@ -134,5 +138,21 @@ class MainActivity : AppCompatActivity(), MifareCardOperationCallback {
     }
 
     override fun onError(p0: QPOSService.Error?) {
+        CoroutineScope(Dispatchers.Default).launch {
+            pos?.finishMifareCard(1)
+            CoroutineScope(Dispatchers.Main).launch {
+                val nOfErrors = (binding.tvErrorTransactions.text).toString().toInt() ?: 0
+                binding.tvErrorTransactions.text = (nOfErrors+1).toString()
+                increaseTotalTransactions()
+            }
+            delay(3000)
+
+            pos?.pollOnMifareCard(10)
+        }
+    }
+
+    private fun increaseTotalTransactions() {
+        val nTotal = (binding.tvTotalTransactions.text).toString().toInt() ?: 0
+        binding.tvTotalTransactions.text = (nTotal+1).toString()
     }
 }

@@ -15,10 +15,10 @@
       </SelectionState>
       <SelectionState runConfigName="nfcReader()">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-01-06T23:39:49.609714Z">
+        <DropdownSelection timestamp="2025-01-07T00:24:22.386255Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="Default" identifier="serial=172.20.10.3:33785;connection=e90ba33a" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=16100159324091900381" />
             </handle>
           </Target>
         </DropdownSelection>
