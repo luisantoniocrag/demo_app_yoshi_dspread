@@ -1,6 +1,8 @@
 package com.example.dspread_yoshi_basic_use_case
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.Application
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -8,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dspread.xpos.QPOSService
+import com.example.dspread_yoshi_basic_use_case.adapters.MessageErrorsRecyclerView
 import com.example.dspread_yoshi_basic_use_case.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,10 +24,13 @@ class MainActivity : AppCompatActivity(), MifareCardOperationCallback {
     private lateinit var pos : QPOSService
 
     var posIsActive = false
+    private lateinit var applicationClass : DSpreadYoshiApplication
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        applicationClass = (application as DSpreadYoshiApplication)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
@@ -44,11 +50,17 @@ class MainActivity : AppCompatActivity(), MifareCardOperationCallback {
             delay(1000)
             initalizePOS()
         }
+
+        setUI()
+    }
+
+    private fun setUI() {
+        binding.tvDeviceVersionInformation.text = applicationClass.getDeviceVersionInformation()
     }
 
 
     private suspend fun initalizePOS() {
-        (application as DSpreadYoshiApplication).open(
+        applicationClass.open(
             mode = QPOSService.CommunicationMode.UART, this
         ) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -74,6 +86,7 @@ class MainActivity : AppCompatActivity(), MifareCardOperationCallback {
 
     private fun setButtonStatus() {
         binding.actionBtn.setOnClickListener {
+            disableButton()
             binding.actionBtn.text = "Detectando NFC...".uppercase()
             binding.tvCardInfo.visibility = View.GONE
             pos?.pollOnMifareCard(10)
@@ -144,6 +157,9 @@ class MainActivity : AppCompatActivity(), MifareCardOperationCallback {
                 val nOfErrors = (binding.tvErrorTransactions.text).toString().toInt() ?: 0
                 binding.tvErrorTransactions.text = (nOfErrors+1).toString()
                 increaseTotalTransactions()
+
+                val errorMsg = p0.toString()
+                launchErrorModal(errorMsg)
             }
             delay(3000)
 
@@ -154,5 +170,16 @@ class MainActivity : AppCompatActivity(), MifareCardOperationCallback {
     private fun increaseTotalTransactions() {
         val nTotal = (binding.tvTotalTransactions.text).toString().toInt() ?: 0
         binding.tvTotalTransactions.text = (nTotal+1).toString()
+    }
+
+    private fun launchErrorModal(message: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("onError()")
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 }

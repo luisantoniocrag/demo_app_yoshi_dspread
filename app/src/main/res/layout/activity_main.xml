@@ -7,44 +7,69 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        app:layout_constraintTop_toTopOf="parent"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clDeviceVersionInformation"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="22dp"
-        android:layout_marginStart="48dp"
-        android:textSize="22dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#1e40af"
+        >
+
+        <TextView
+            android:id="@+id/tvDeviceVersionInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Device Version Information"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
         android:id="@+id/tvSuccessTransactions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:text="0"
         android:textColor="#06402b"
+        android:textSize="22dp"
         android:textStyle="bold"
-        android:text="0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTotalTransactions" />
 
     <TextView
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="48sp"
         android:id="@+id/tvTotalTransactions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="0"
         android:textColor="#06402b"
+        android:textSize="48sp"
         android:textStyle="bold"
-        android:text="0" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clDeviceVersionInformation" />
 
     <TextView
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="22dp"
-        android:layout_marginEnd="48dp"
-        android:textSize="22dp"
         android:id="@+id/tvErrorTransactions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="48dp"
+        android:text="0"
         android:textColor="#942222"
+        android:textSize="22dp"
         android:textStyle="bold"
-        android:text="0" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvPOSStatus" />
 
     <TextView
         android:id="@+id/tvPOSStatus"
